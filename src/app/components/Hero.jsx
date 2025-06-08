@@ -89,6 +89,34 @@ const Hero = () => {
               </div>
             </label>
 
+            {/* button elements to display some services */}
+            <div className="flex flex-wrap mx-auto items-center gap-4 mt-2">
+              <button className="bg-transparent border border-[#A020F0] text-white px-6 py-2 rounded-lg hover:bg-[#a020f03c] transition flex items-center gap-2">
+                Website Development
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#A020F0" viewBox="0 0 24 24">
+                  <path d="M10 17l5-5-5-5v10z"/>
+                </svg>
+              </button>
+              <button className="bg-transparent border border-[#A020F0] text-white px-6 py-2 rounded-lg hover:bg-[#a020f03c] transition flex items-center gap-2">
+                architecture and interior design
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#A020F0" viewBox="0 0 24 24">
+                  <path d="M10 17l5-5-5-5v10z"/>
+                </svg>
+              </button>
+              <button className="bg-transparent border border-[#A020F0] text-white px-6 py-2 rounded-lg hover:bg-[#a020f03c] transition flex items-center gap-2">
+                AI Services
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#A020F0" viewBox="0 0 24 24">
+                  <path d="M10 17l5-5-5-5v10z"/>
+                </svg>
+              </button>
+              <button className="bg-transparent border border-[#A020F0] text-white px-6 py-2 rounded-lg hover:bg-[#a020f03c] transition flex items-center gap-2">
+                Logo Design
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#A020F0" viewBox="0 0 24 24">
+                  <path d="M10 17l5-5-5-5v10z"/>
+                </svg>
+              </button>
+            </div>
+
             {/* 🔘 Play/Pause Button */}
             <button
               onClick={togglePlayPause}
