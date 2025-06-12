@@ -3,7 +3,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image"; // Keep Image if you want to use a proper logo image later
 import Link from "next/link";
-import { FaArrowRight } from "react-icons/fa6"; // Keep FaArrowRight for the existing buttons
+import { FaArrowRight } from "react-icons/fa6";
+
+
 
 const Navbar = () => {
   const sideMenuRef = useRef(null); // Initialize with null
@@ -91,7 +93,7 @@ const Navbar = () => {
           {[
             { name: "Business", href: "/business" },
             { name: "Explore", href: "/#explore" },
-            { name: "Freelance", href: "/#seller" },
+            { name: "Projects", href: "/projects" },
           ].map((item) => (
             <li key={item.name}>
               <Link
