@@ -8,6 +8,11 @@ const ProjectPage = () => {
   const [showBidModal, setShowBidModal] = useState(false);
   const [currentBidIndex, setCurrentBidIndex] = useState(null);
   const [expandedBids, setExpandedBids] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const [showFilterPopover, setShowFilterPopover] = useState(false);
 
   const [projects, setProjects] = useState(() => {
     if (typeof window !== "undefined") {
@@ -51,6 +56,30 @@ const ProjectPage = () => {
       ...prev,
       [index]: !prev[index],
     }));
+  };
+
+  const filteredProjects = projects.filter((project) => {
+    const matchesSearch = project.title
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+
+    const matchesTags =
+      selectedTags.length === 0 ||
+      selectedTags.every((tag) => project.tags.includes(tag));
+
+    const matchesSkills =
+      selectedSkills.length === 0 ||
+      selectedSkills.every((skill) => project.skills.includes(skill));
+
+    return matchesSearch && matchesTags && matchesSkills;
+  });
+
+  const toggleFilter = (value, setState, state) => {
+    if (state.includes(value)) {
+      setState(state.filter((item) => item !== value));
+    } else {
+      setState([...state, value]);
+    }
   };
 
   return (
@@ -105,6 +134,161 @@ const ProjectPage = () => {
           </button>
         </div>
       </div>
+      {/* Search and Filter */}
+      {activeTab === "projects" && (
+        <div className="p-6 pt-4 space-y-4">
+          <div className="bg-white shadow-sm p-6 rounded-xl">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <input
+                type="text"
+                placeholder="Search projects..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full sm:w-[80%] px-4 py-2 rounded-md border outline-none"
+              />
+              <div className="relative">
+                <button
+                  onClick={() => setShowFilterPopover(!showFilterPopover)}
+                  className="bg-gray-100 px-4 py-2 rounded-md font-medium"
+                >
+                  Filter
+                </button>
+
+                {showFilterPopover && (
+                  <div className="absolute z-10 mt-2 right-0 bg-white border shadow-md p-4 rounded-xl w-[300px] sm:w-[350px]">
+                    <div>
+                      <h4 className="font-semibold mb-2">Filter by Tags</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          "HTML",
+                          "CSS",
+                          "JavaScript",
+                          "React",
+                          "Python",
+                          "Next.js",
+                          "Node.js",
+                        ].map((tag) => (
+                          <label
+                            key={tag}
+                            className="flex items-center space-x-2"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedTags.includes(tag)}
+                              onChange={() =>
+                                toggleFilter(tag, setSelectedTags, selectedTags)
+                              }
+                            />
+                            <span className="text-sm">{tag}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <h4 className="font-semibold mb-2">Filter by Skills</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          "Frontend",
+                          "Backend",
+                          "Full Stack",
+                          "UI/UX",
+                          "Database",
+                          "API Integration",
+                        ].map((skill) => (
+                          <label
+                            key={skill}
+                            className="flex items-center space-x-2"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedSkills.includes(skill)}
+                              onChange={() =>
+                                toggleFilter(
+                                  skill,
+                                  setSelectedSkills,
+                                  selectedSkills
+                                )
+                              }
+                            />
+                            <span className="text-sm">{skill}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex justify-end">
+                      <button
+                        onClick={() => setShowFilterPopover(false)}
+                        className="text-sm bg-black text-white px-3 py-1 rounded-md"
+                      >
+                        Apply Filters
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showFilterPanel && (
+        <div className="mt-4 p-4 bg-gray-50 border rounded-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Tags Filter */}
+          <div>
+            <h4 className="font-semibold mb-2">Filter by Tags</h4>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "HTML",
+                "CSS",
+                "JavaScript",
+                "React",
+                "Python",
+                "Next.js",
+                "Node.js",
+              ].map((tag) => (
+                <label key={tag} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedTags.includes(tag)}
+                    onChange={() =>
+                      toggleFilter(tag, setSelectedTags, selectedTags)
+                    }
+                  />
+                  <span className="text-sm">{tag}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills Filter */}
+          <div>
+            <h4 className="font-semibold mb-2">Filter by Skills</h4>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Frontend",
+                "Backend",
+                "Full Stack",
+                "UI/UX",
+                "Database",
+                "API Integration",
+              ].map((skill) => (
+                <label key={skill} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedSkills.includes(skill)}
+                    onChange={() =>
+                      toggleFilter(skill, setSelectedSkills, selectedSkills)
+                    }
+                  />
+                  <span className="text-sm">{skill}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main content */}
       <div className="p-6 space-y-4">
@@ -266,7 +450,7 @@ const ProjectPage = () => {
               </button>
             </div>
 
-            {projects.map((project, index) => (
+            {filteredProjects.map((project, index) => (
               <div key={index} className="border rounded-xl p-5 mb-6 shadow-sm">
                 <h3 className="text-xl font-bold">{project.title}</h3>
                 <p className="text-gray-500 mb-2">{project.description}</p>
@@ -357,6 +541,11 @@ const ProjectPage = () => {
                 )}
               </div>
             ))}
+            {filteredProjects.length === 0 && (
+              <p className="text-center text-gray-500 py-10">
+                No projects found matching your search.
+              </p>
+            )}
           </div>
         )}
 
